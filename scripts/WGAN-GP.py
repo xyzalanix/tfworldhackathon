@@ -17,11 +17,11 @@ tf.config.experimental.set_memory_growth(gpus[0], True)
 
 # Define hyperparameters
 MODEL_DIMS = 64
-NUM_SAMPLES = 65536
+NUM_SAMPLES = 16384
 D_UPDATES_PER_G_UPDATE = 5
 GRADIENT_PENALTY_WEIGHT = 10.0
 NOISE_LEN = 100
-EPOCHS = 500
+EPOCHS = 10000
 EPOCHS_PER_SAMPLE = 2
 BATCH_SIZE = 16
 Fs = 16000
@@ -130,7 +130,7 @@ class GAN:
         return {'d_loss': x_real_d_loss + x_fake_d_loss, 'gp': gp}
 
     # Creates music samples and saves current generator model
-    def sample(self, epoch, num_samples=10):
+    def sample(self, epoch, num_samples=5):
         self.G.save(f"models/{INSTRUMENT}/{epoch}.h5")
         z = tf.random.normal(shape=(num_samples,) + self.noise_dims)
         result = self.G(z, training=False)
