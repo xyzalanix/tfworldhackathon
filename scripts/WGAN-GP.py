@@ -16,18 +16,18 @@ gpus = tf.config.experimental.list_physical_devices('GPU')
 tf.config.experimental.set_memory_growth(gpus[0], True)
 
 # Define hyperparameters
-MODEL_DIMS = 64
+MODEL_DIMS = 64 ###128 works, no sé qué cambia.
 NUM_SAMPLES = 16384
 D_UPDATES_PER_G_UPDATE = 5
 GRADIENT_PENALTY_WEIGHT = 10.0
 NOISE_LEN = 100
 EPOCHS = 10000
-EPOCHS_PER_SAMPLE = 2
+EPOCHS_PER_SAMPLE = 8 ##cada cuánto arroja output
 BATCH_SIZE = 16
 Fs = 16000
 
-DATA_DIR = "losojos"
-INSTRUMENT = "losojos"
+DATA_DIR = "kazimir"
+INSTRUMENT = "kazimir"
 
 print("Creating necessary directories")
 
@@ -130,7 +130,7 @@ class GAN:
         return {'d_loss': x_real_d_loss + x_fake_d_loss, 'gp': gp}
 
     # Creates music samples and saves current generator model
-    def sample(self, epoch, num_samples=5):
+    def sample(self, epoch, num_samples=1):        ######aquí num_samples es cuántos outputs por epoch output
         self.G.save(f"models/{INSTRUMENT}/{epoch}.h5")
         z = tf.random.normal(shape=(num_samples,) + self.noise_dims)
         result = self.G(z, training=False)
